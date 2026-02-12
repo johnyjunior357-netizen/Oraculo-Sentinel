@@ -2,39 +2,48 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Oráculo Sentinel | Crispim</title>
-    <link rel="stylesheet" href="style.css">
+    <title>ORÁCULO SENTINEL - WAR ROOM</title>
+    <style>
+        body { background: #000; color: #00f3ff; font-family: 'Share Tech Mono', monospace; margin: 0; }
+        .top-bar { display: flex; justify-content: space-around; background: #050505; border-bottom: 1px solid #00f3ff; padding: 10px; font-size: 14px; }
+        .ticker { color: #ffff00; }
+        .scanner { height: 2px; background: rgba(0,243,255,0.3); position: fixed; width: 100%; animation: scan 3s infinite; }
+        @keyframes scan { 0% {top:0} 100% {top:100%} }
+        .header { text-align: center; padding: 20px; color: #ff0000; text-shadow: 0 0 10px #ff0000; }
+        .grid { display: grid; grid-template-columns: 1fr; gap: 10px; padding: 20px; }
+        .card { border: 1px solid #111; padding: 15px; background: rgba(5,5,5,0.9); border-left: 3px solid #ff0000; }
+        .badge { font-size: 10px; background: #222; padding: 2px 5px; margin-right: 5px; }
+        footer { position: fixed; bottom: 0; width: 100%; background: #00f3ff; color: #000; font-size: 10px; padding: 3px; font-weight: bold; }
+    </style>
 </head>
 <body>
-    <header>
-        <h1>SISTEMA ORÁCULO <span>SENTINEL</span></h1>
-        <p>Desenvolvido por Crispim</p>
-    </header>
+    <div class="scanner"></div>
+    <div class="top-bar">
+        <span>BTC/USD: <span id="btc-val" class="ticker">--</span></span>
+        <span>USD/BRL: <span id="usd-val" class="ticker">--</span></span>
+    </div>
+    <div class="header"><h1>🛡️ SENTINEL GEOPOLITICAL HUB</h1></div>
+    <div class="grid" id="feed">Caminhando pelos servidores mundiais...</div>
+    <footer>OPERADOR: CRISPIM | LOCAL: GOIÂNIA | STATUS: MONITORANDO</footer>
 
-    <main class="dashboard">
-        <section class="card" id="news-bot">
-            <h2>🤖 Bot de Notícias</h2>
-            <div class="status">Status: <span class="online">Online</span></div>
-            <div id="feed-noticias">
-                <p>Aguardando novas capturas...</p>
-            </div>
-        </section>
-
-        <section class="card" id="resistencia">
-            <h2>🇷🇺 A Resistência</h2>
-            <p>Monitorando tecnologias ocultas e segredos globais.</p>
-        </section>
-
-        <section class="card" id="libras">
-            <h2>🤟 Espaço Libras</h2>
-            <div class="video-placeholder">Vídeo traduzido aqui</div>
-        </section>
-    </main>
-
-    <footer>
-        <p>&copy; 2026 Oráculo Inteligência & Crispim</p>
-    </footer>
+    <script>
+        async function atualizar() {
+            const res = await fetch('/api/noticias');
+            const data = await res.json();
+            // Aqui o app.py deve enviar tanto moedas quanto notícias
+            document.getElementById('btc-val').innerText = data.moedas[0].valor;
+            document.getElementById('usd-val').innerText = data.moedas[1].valor;
+            
+            document.getElementById('feed').innerHTML = data.noticias.map(n => `
+                <div class="card">
+                    <span class="badge">${n.categoria}</span>
+                    <a href="${n.link}" style="color:#fff; text-decoration:none;">${n.titulo.toUpperCase()}</a>
+                </div>
+            `).join('');
+        }
+        setInterval(atualizar, 60000);
+        atualizar();
+    </script>
 </body>
 </html>
 
