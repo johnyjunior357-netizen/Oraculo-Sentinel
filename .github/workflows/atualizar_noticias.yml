@@ -1,0 +1,32 @@
+name: Oráculo Sentinel Auto-Update
+
+on:
+  schedule:
+    - cron: '0 * * * *'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout do Código
+        uses: actions/checkout@v3
+
+      - name: Configurar Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.12'
+
+      - name: Instalar Dependências
+        run: pip install requests beautifulsoup4 flask
+
+      - name: Executar Varredura
+        run: python app.py --auto-update
+
+      - name: Salvar Alterações
+        run: |
+          git config --global user.name "Oráculo Sentinel Bot"
+          git config --global user.email "bot@oraculo.com"
+          git add .
+          git commit -m "Automação: Notícias e Rankings atualizados" || exit 0
+          git push
