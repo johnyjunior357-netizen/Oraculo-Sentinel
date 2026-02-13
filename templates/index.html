@@ -2,36 +2,83 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Oráculo Sentinel v1.0</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oráculo Sentinel v1.0 - Central de Inteligência</title>
     <style>
-        body { background-color: #0a0a0a; color: #00f2ff; font-family: 'Courier New', monospace; text-align: center; }
+        body { background-color: #0a0a0a; color: #00f2ff; font-family: 'Courier New', monospace; text-align: center; margin: 0; padding: 0; }
+        
+        /* LETREIRO DE ALERTA CRÍTICO (SOCIAL) */
+        .marquee-container {
+            background: #ff0000;
+            color: white;
+            padding: 12px 0;
+            font-weight: bold;
+            overflow: hidden;
+            white-space: nowrap;
+            box-shadow: 0 0 20px #ff0000;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        .marquee-text {
+            display: inline-block;
+            padding-left: 100%;
+            animation: marquee 25s linear infinite;
+        }
+        @keyframes marquee {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(-100%, 0); }
+        }
+
         .container { display: flex; flex-direction: column; align-items: center; padding: 20px; }
+        
         .modulo { 
             border: 2px solid #00f2ff; 
             box-shadow: 0 0 15px #00f2ff; 
             margin: 15px; 
             padding: 20px; 
-            width: 80%;
+            width: 90%;
+            max-width: 800px;
             border-radius: 10px;
             background: rgba(0, 242, 255, 0.05);
         }
-        .social { border-color: #ff00ff; box-shadow: 0 0 15px #ff00ff; color: #ff00ff; }
-        h1 { text-shadow: 0 0 20px #00f2ff; font-size: 2em; }
+        
+        /* CORES POR CATEGORIA */
+        .social-box { border-color: #ff00ff; box-shadow: 0 0 15px #ff00ff; color: #ff00ff; }
+        .help-guide { border-color: #ffff00; box-shadow: 0 0 15px #ffff00; color: #ffff00; }
+        
+        h1 { text-shadow: 0 0 20px #00f2ff; margin-top: 30px; font-size: 1.8em; }
         span { color: #fff; font-weight: bold; }
+
+        /* RODAPÉ PROFISSIONAL CRISPIM */
+        footer {
+            margin-top: 50px;
+            padding: 30px;
+            border-top: 1px solid #00f2ff;
+            background: rgba(0, 0, 0, 0.9);
+        }
+        .crispim-brand { 
+            color: #ff00ff; 
+            font-weight: bold; 
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
     </style>
 </head>
 <body>
+
+    <div class="marquee-container">
+        <div class="marquee-text">
+            🚨 RADAR SOCIAL ATIVO: {{ dados.social }} — AJUDA PÚBLICA EM TEMPO REAL — MONITORAMENTO ORÁCULO SENTINEL — DESAPARECIDOS E CRIMES CRÍTICOS 🚨
+        </div>
+    </div>
+
     <h1>🛰️ ORÁCULO SENTINEL - INTELIGÊNCIA</h1>
+    
     <div class="container">
-        
         <div class="modulo">
             <h3>💰 Mercado & Cripto</h3>
             <p><span>STATUS:</span> {{ dados.financeiro }}</p>
-        </div>
-
-        <div class="modulo social">
-            <h3>🚨 Alertas Sociais & Segurança</h3>
-            <p><span>STATUS:</span> {{ dados.social }}</p>
         </div>
 
         <div class="modulo">
@@ -39,7 +86,23 @@
             <p><span>STATUS:</span> {{ dados.geopolitica }}</p>
         </div>
 
+        <div class="modulo help-guide">
+            <h3>📖 Guia de Ajuda Social</h3>
+            <p><span>AÇÃO:</span> Monitoramento ativo de registros de crianças desaparecidas e alertas de Serial Killers.</p>
+            <p><em>"Nossa ferramenta social busca dar visibilidade aos que não podem ser esquecidos."</em></p>
+        </div>
+
+        <div class="modulo social-box">
+            <h3>🚨 Alertas de Segurança</h3>
+            <p><span>RADAR:</span> {{ dados.social }}</p>
+        </div>
     </div>
+
+    <footer>
+        <p>📡 <span class="crispim-brand">Desenvolvido por Crispim</span></p>
+        <p>Engenharia de Software e Inovação 2026 EOF</p>
+    </footer>
+
 </body>
 </html>
 
