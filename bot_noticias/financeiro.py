@@ -11,7 +11,7 @@ def monitor_financeiro_atualizado():
         
         # Uso do .get() para evitar o KeyError (Erro de chave ausente)
         dolar_data = dados.get('USDBRL', {})
-        btc_data = dados.get('BTCBRL', {})
+        btc_data = dados.get('BTCBRL', {}) # Corrigido para BTCBRL
         
         # Pega o valor de compra ('bid'), se não existir usa "0"
         valor_dolar = dolar_data.get('bid', '0')
