@@ -1,11 +1,8 @@
-from flask import Flask, render_template
+import sys
 import threading
 import time
-
-# Importando seus scripts
-from bot_noticias.social import monitor_social_alertas
+from flask import Flask, render_template, jsonify
 from bot_noticias.financeiro import monitor_financeiro_atualizado
-from bot_noticias.geopolitica import radar_geopolitico_2026
 
 app = Flask(__name__)
 
@@ -13,25 +10,45 @@ app = Flask(__name__)
 dados_sentinel = {
     "financeiro": "Iniciando radar...",
     "social": "Varredura ativa...",
-    "geopolitica": "Analisando potências..."
+    "geopolitico": "Analisando potências...",
+    "status": "Online"
 }
 
-def rodar_bots():
+def radar_bots():
+    """Roda em segundo plano no Termux para atualizar o painel"""
     while True:
-        # Atualiza a memória com o retorno das funções
+        print("[RADAR] Atualizando informações do banco de memória...")
         dados_sentinel["financeiro"] = monitor_financeiro_atualizado()
-        dados_sentinel["social"] = monitor_social_alertas()
-        # Para a geopolítica, como é uma lista, vamos pegar os 3 primeiros
-        dados_sentinel["geopolitica"] = "EUA, Rússia e China no topo do ranking 2026."
-        time.sleep(30) # Atualiza o site a cada 30 segundos
+        # Aqui você pode adicionar as outras funções (geopolitica, etc) futuramente
+        time.sleep(60) # Atualiza a cada 1 minuto no modo servidor
 
 @app.route('/')
 def index():
-    # Passa a variável 'dados' para o HTML usar
     return render_template('index.html', dados=dados_sentinel)
 
-if __name__ == '__main__':
-    # Roda os bots sem travar o site
-    threading.Thread(target=rodar_bots, daemon=True).start()
-    app.run(host='0.0.0.0', port=5000)
+@app.route('/api/updates')
+def updates():
+    return jsonify(dados_sentinel)
+
+if __name__ == "__main__":
+    # LOGICA PARA O GITHUB ACTIONS (MODO SENTINELA)
+    if "--auto-update" in sys.argv:
+        print("[🤖] MODO AUTOMÁTICO DETECTADO (GITHUB ACTIONS)")
+        # Realiza a varredura uma única vez
+        resumo = monitor_financeiro_atualizado()
+        
+        # Opcional: Salvar em um arquivo JSON para o GitHub dar o Push
+        import json
+        with open('dados_sentinel.json', 'w') as f:
+            json.dump({"financeiro": resumo, "ultimo_check": time.ctime()}, f)
+            
+        print("[✅] Varredura finalizada com sucesso. Encerrando processo.")
+        sys.exit(0) # Força a saída para o GitHub Actions não travar
+
+    # LOGICA PARA O TERMUX (MODO MANUAL/PAINEL)
+    else:
+        print("[🔥] INICIANDO ORÁCULO SENTINEL NO MODO SERVIDOR")
+        threading.Thread(target=radar_bots, daemon=True).start()
+        # Roda o servidor Flask no IP local
+        app.run(host='0.0.0.0', port=5000, debug=False)
 

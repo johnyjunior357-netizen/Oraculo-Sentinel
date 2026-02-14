@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oráculo Sentinela - Radar Global</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="overlay"></div>
+    
+    <header>
+        <div class="logo">
+            <span class="pulse"></span> ORÁCULO SENTINELA
+        </div>
+        <div class="status-radar">RADAR ATIVO: TRANSMITINDO AO VIVO</div>
+    </header>
+
+    <main class="dashboard">
+        <section class="panel news-panel">
+            <h2><i class="icon-radar"></i> NOTÍCIAS CAPTADAS</h2>
+            <div id="news-feed" class="feed">
+                <div class="news-item">Aguardando sinal do satélite...</div>
+            </div>
+        </section>
+
+        <section class="side-panels">
+            <div class="panel finance-panel">
+                <h2>MERCADO FINANCEIRO</h2>
+                <div class="market-grid">
+                    <div class="coin">BTC: <span class="up">R$ --.---</span></div>
+                    <div class="coin">XMR: <span class="up">R$ ---,--</span></div>
+                </div>
+            </div>
+
+            <div class="panel ranking-panel">
+                <h2>TOP 10 SENTINELA</h2>
+                <ol id="top-ranking">
+                    <li>Carregando ranking global...</li>
+                </ol>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+         Desenvolvido por <strong>Crispim</strong> | Engenharia de Software e Inovação EOF
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
+

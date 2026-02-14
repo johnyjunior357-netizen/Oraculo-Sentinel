@@ -2,33 +2,27 @@ import requests
 
 def monitor_financeiro_atualizado():
     print("\n[💰] ACESSANDO RADAR FINANCEIRO - ORÁCULO SENTINEL...")
-    
-    # URL para pegar Dólar, Bitcoin e Monero (via USDT ou direto se disponível)
+    # API da AwesomeAPI (Dólar, Bitcoin e Ethereum)
     url = "https://economia.awesomeapi.com.br/last/USD-BRL,BTC-BRL,ETH-BRL"
     
     try:
         response = requests.get(url, timeout=10)
         dados = response.json()
         
-        # Extraindo valores
-        dolar = dados['USDBRL']['bid']
-        btc = dados['BTCBRL']['bid']
+        # Uso do .get() para evitar o KeyError (Erro de chave ausente)
+        dolar_data = dados.get('USDBRL', {})
+        btc_data = dados.get('BTCBRL', {})
         
-        print(f"💵 Dólar Comercial: R$ {float(dolar):.2f}")
-        print(f"₿ Bitcoin: R$ {float(btc):.2f}")
+        # Pega o valor de compra ('bid'), se não existir usa "0"
+        valor_dolar = dolar_data.get('bid', '0')
+        valor_btc = btc_data.get('bid', '0')
         
-        # Lógica de Impacto (Para o seu portfólio de notícias)
-        if float(dolar) > 5.50:
-            print("⚠️ ALERTA: Dólar em alta. Impacto negativo previsto para importações.")
-        else:
-            print("✅ Estabilidade detectada no par USD/BRL.")
+        # Formata os valores para 2 casas decimais
+        resultado = f"💵 Dólar: R$ {float(valor_dolar):.2f} | ₿ BTC: R$ {float(valor_btc):.2f}"
+        print(f"[✅] {resultado}")
+        return resultado
 
     except Exception as e:
         print(f"[!] Erro ao captar dados financeiros: {e}")
-
-        resultado = f"💵 Dólar: R$ {float(dolar):.2f} | ₿ BTC: R$ {float(btc):.2f}"
-        return resultado
-    except:
-        return "⚠️ Erro ao acessar dados financeiros."
-
+        return "⚠️ Erro ao acessar radar financeiro."
 
